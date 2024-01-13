@@ -7,23 +7,29 @@ Make sure you have python installed on your system:
 
 ## Project Setup
 
-- Clone the repository in a local folder
+- Update the dependencies
     ```sh
-    git clone https://github.com/loki-geek/ai-app.git
+    #For Amazon Linux 2023
+    sudo yum update && sudo yum upgrade
+    #For Ubuntu, use 'apt' instead of 'yum'.
     ```
-- Open terminal and verify python version
+- Install Python and pip
   ```sh
+    sudo yum install python
     python --version
-    ```
-- Verify if pip is installed
-  ```sh
+    curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
+    python get-pip.py
     pip --version
     ```
-## Setup Backend
-- Nvaigate to cloned project directory
-  ```sh
-    cd chatbot_app
+- Create a new directory and Clone the repository in a local folder
+    ```sh
+    mkdir ai-app
+    cd ai-app
+    git clone https://github.com/loki-geek/ai-app.git
     ```
+    
+## Setup Backend
+
 - Create a python virtual environment for backend
   ```sh
     python3 -m venv chatenv
@@ -45,3 +51,10 @@ Make sure you have python installed on your system:
    python manage.py runserver
     ```
 - Django backend server will start on http://localhost:8000/
+  
+- Stop the server by pressing CTRL+C
+  
+- Deactivate the venv
+  ```sh
+   deactivate
+    ```
