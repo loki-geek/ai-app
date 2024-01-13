@@ -1,0 +1,129 @@
+{% extends 'base.html' %}
+
+{% block styles %}
+<style>
+    body {
+        background-color: #f2f2f2;
+        font-family: Arial, sans-serif;
+    }
+    h1 {
+        text-align: center;
+        color: #4d4d4d;
+        margin-top: 50px;
+    }
+    form {
+        margin: 50px auto;
+        width: 50%;
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0px 0px 10px #bfbfbf;
+    }
+    input[type="radio"], input[type="checkbox"] {
+        margin-right: 10px;
+    }
+    input[type="text"], select {
+        width: 100%;
+        padding: 12px 20px;
+        margin: 8px 0;
+        display: inline-block;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+    }
+    input[type="submit"] {
+        background-color: #4CAF50;
+        color: white;
+        padding: 14px 20px;
+        margin: 8px 0;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+    input[type="submit"]:hover {
+        background-color: #45a049;
+    }
+    .output {
+        margin: 50px auto;
+        width: 50%;
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0px 0px 10px #bfbfbf;
+    }
+    #output-text {
+        width: 100%;
+        height: 200px;
+        margin-top: 20px;
+        padding: 12px 20px;
+        display: inline-block;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="app">
+    <h1>Recipe Recommendation</h1>
+	<form class="input-form">
+        {% csrf_token %}
+		<label for="meal-type">*Meal Type:</label>
+		<select id="meal-type" name="meal-type">
+			<option value="breakfast">Breakfast</option>
+			<option value="lunch">Lunch</option>
+			<option value="dinner">Dinner</option>
+		</select><br><br>
+		<label for="veg-nonveg">*Food Type:</label>
+		<select id="foodtype" name="food-type">
+			<option value="veg">Vegetarian</option>
+			<option value="nonveg">Non-vegetarian</option>
+            <option value="vegan">Vegan</option>
+		</select><br><br>
+		<label for="ingredients">*Ingredients:</label>
+		<input type="text" id="ingredients" name="ingredients"><br><br>
+		<input type="submit" value="Submit">
+	</form>
+    <div class="output">
+		<label for="output-text">Output:</label>
+		<textarea id="output-text" readonly></textarea>
+	</div>
+</div>
+
+
+<script>
+    const inputForm = document.querySelector('.input-form');
+    const mealType = document.getElementById('meal-type').value;
+    const foodType = document.getElementById('foodtype').value;
+    const ingredientItems = document.getElementById('ingredients');
+    const displayOutput = document.querySelector('#output-text');
+
+    inputForm.addEventListener('submit', (event) => {
+        event.preventDefault();
+        
+        const inputValue1 = mealType.trim();
+        const inputValue2 = foodType.trim();
+        const inputValue3 = ingredientItems.value.trim();
+        if (inputValue1.length == 0 || inputValue2 == 0 || inputValue3 == 0) {
+            return;
+        }
+
+        fetch('', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: new URLSearchParams({
+                'mealtype': inputValue1,
+                'foodtype': inputValue2,
+                'ingredients': inputValue3
+            })
+        })
+            .then(response => response.json())
+            .then(data => {
+                const res = data.response;
+                displayOutput.append(res);
+            });
+    });
+
+</script>
+{% endblock %}
